@@ -55,6 +55,29 @@
       "title": "Open iTerm Here",
       "description": "Open iTerm in the currently selected folder(s)",
       "mode": "view"
+    },
+    {
+      "name": "open-tab",
+      "title": "Open Tab",
+      "description": "Open iTerm window/tab by name",
+      "mode": "view",
+      "preferences": [
+        {
+          "name": "defaultWindowName",
+          "title": "Default Tab Name",
+          "description": "If specified, will immediately focus the first tab with this name without showing the list",
+          "type": "textfield",
+          "required": false
+        },
+        {
+          "name": "showOnlyNamedTabs",
+          "title": "Show Only Named Tabs",
+          "description": "Hide generic shell tabs like -zsh, bash, etc.",
+          "type": "checkbox",
+          "default": true,
+          "required": false
+        }
+      ]
     }
   ],
   "tools": [
