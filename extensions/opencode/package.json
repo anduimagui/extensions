@@ -1,0 +1,195 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "opencode",
+  "title": "Opencode Desktop",
+  "description": "Search Opencode projects, worktrees, sessions, and docs from Raycast.",
+  "icon": "@assets/icon.png",
+  "author": "anduimagui",
+  "license": "MIT",
+  "homepage": "https://github.com/anduimagui/opencode-raycast",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anduimagui/opencode-raycast.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anduimagui/opencode-raycast/issues"
+  },
+  "keywords": [
+    "raycast",
+    "opencode",
+    "macos",
+    "developer-tools"
+  ],
+  "type": "module",
+  "categories": [
+    "Developer Tools"
+  ],
+  "platforms": [
+    "macOS"
+  ],
+  "preferences": [
+    {
+      "name": "cloneDirectory",
+      "type": "directory",
+      "required": true,
+      "title": "Clone Directory",
+      "description": "Default folder used by the Clone Project command for new repositories."
+    }
+  ],
+  "commands": [
+    {
+      "name": "search-projects",
+      "title": "Search Projects",
+      "subtitle": "Opencode",
+      "description": "Search Opencode projects from the local CLI and open them in Opencode.",
+      "icon": "@assets/icon.png",
+      "mode": "view"
+    },
+    {
+      "name": "clone-project",
+      "title": "Clone Project",
+      "subtitle": "Opencode",
+      "description": "Clone a Git repository into your configured folder and open it in Opencode.",
+      "icon": "@assets/icon.png",
+      "mode": "no-view",
+      "arguments": [
+        {
+          "name": "repositoryUrl",
+          "type": "text",
+          "placeholder": "https://github.com/sst/opencode"
+        }
+      ]
+    },
+    {
+      "name": "sync",
+      "title": "Sync Cache",
+      "subtitle": "Opencode",
+      "description": "Refresh the cached Opencode project list and icons.",
+      "icon": "@assets/icon.png",
+      "mode": "no-view"
+    },
+    {
+      "name": "open-last-unread-session",
+      "title": "Open Unread Sessions",
+      "subtitle": "Opencode",
+      "description": "Show Opencode sessions that need attention, using the same dot states as the sidebar.",
+      "icon": "@assets/icon.png",
+      "mode": "view"
+    },
+    {
+      "name": "worktrees",
+      "title": "Search Worktrees",
+      "subtitle": "Opencode",
+      "description": "Search Opencode worktrees and open them in Opencode.",
+      "icon": "@assets/icon.png",
+      "mode": "view"
+    },
+    {
+      "name": "search-documentation",
+      "title": "Search Documentation",
+      "subtitle": "Opencode",
+      "description": "Browse Opencode documentation and open any page in your browser.",
+      "icon": "@assets/icon.png",
+      "mode": "view",
+      "preferences": [
+        {
+          "name": "docsLocale",
+          "type": "dropdown",
+          "required": true,
+          "title": "Documentation Locale",
+          "description": "Only show documentation pages for the selected language.",
+          "default": "en",
+          "data": [
+            {
+              "title": "English",
+              "value": "en"
+            },
+            {
+              "title": "Arabic",
+              "value": "ar"
+            },
+            {
+              "title": "Danish",
+              "value": "da"
+            },
+            {
+              "title": "German",
+              "value": "de"
+            },
+            {
+              "title": "Spanish",
+              "value": "es"
+            },
+            {
+              "title": "French",
+              "value": "fr"
+            },
+            {
+              "title": "Italian",
+              "value": "it"
+            },
+            {
+              "title": "Japanese",
+              "value": "ja"
+            },
+            {
+              "title": "Korean",
+              "value": "ko"
+            },
+            {
+              "title": "Norwegian Bokmal",
+              "value": "nb"
+            },
+            {
+              "title": "Polish",
+              "value": "pl"
+            },
+            {
+              "title": "Portuguese (Brazil)",
+              "value": "pt-br"
+            },
+            {
+              "title": "Russian",
+              "value": "ru"
+            },
+            {
+              "title": "Thai",
+              "value": "th"
+            },
+            {
+              "title": "Turkish",
+              "value": "tr"
+            },
+            {
+              "title": "Chinese (Simplified)",
+              "value": "zh-cn"
+            },
+            {
+              "title": "Chinese (Traditional)",
+              "value": "zh-tw"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.104.10",
+    "react": "19.0.0"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "^2.1.1",
+    "@types/node": "22.13.10",
+    "@types/react": "19.0.10",
+    "eslint": "^9.19.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "lint": "ray lint",
+    "fix-lint": "ray lint --fix",
+    "publish": "npx @raycast/api@latest publish"
+  }
+}
