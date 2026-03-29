@@ -1,25 +1,28 @@
 import { Action, ActionPanel, Icon } from "@raycast/api"
-import { EditProjectForm, type EditProjectFormValues } from "./edit-project-form"
+import {
+  EditProjectForm,
+  type EditProjectFormValues,
+} from "./edit-project-form"
 import { RelatedWorktreesList } from "./related-worktrees-list"
 import { openProject, openProjectRemote } from "../lib/opencode"
 import { type Project } from "../lib/project-store"
 
-// eslint-disable-next-line no-unused-vars
-export type SaveProjectHandler = (project: Project, values: EditProjectFormValues) => Promise<boolean>
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable no-unused-vars */
+export type SaveProjectHandler = (
+  project: Project,
+  values: EditProjectFormValues,
+) => Promise<boolean>
 export type SaveProjectIconHandler = (project: Project) => Promise<boolean>
 
 type ProjectListItemActionsProps = {
   item: Project
-  // eslint-disable-next-line no-unused-vars
   onOpenProject?: (project: Project) => Promise<void>
-  // eslint-disable-next-line no-unused-vars
   onToggleFavorite: (project: Project) => void
-  // eslint-disable-next-line no-unused-vars
   onRemoveProject: (project: Project) => Promise<void>
   onSaveProject: SaveProjectHandler
   onSaveProjectIcon: SaveProjectIconHandler
 }
+/* eslint-enable no-unused-vars */
 
 export function ProjectListItemActions({
   item,

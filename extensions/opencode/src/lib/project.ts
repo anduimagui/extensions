@@ -22,6 +22,7 @@ export function projectSubtitle(item: Project) {
 export function projectAccessoryPath(item: Project) {
   const home = os.homedir()
   if (item.worktree === home) return "~"
-  if (item.worktree.startsWith(`${home}${path.sep}`)) return `~/${item.worktree.slice(home.length + 1)}`
+  if (item.worktree.startsWith(`${home}${path.sep}`))
+    return `~/${item.worktree.slice(home.length + 1)}`
   return item.worktree
 }

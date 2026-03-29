@@ -39,11 +39,17 @@ export function EditProjectForm({ item, onSave }: EditProjectFormProps) {
       isLoading={isSubmitting}
       actions={
         <ActionPanel>
-          <Action.SubmitForm<EditProjectFormValues> title="Save Project" icon={Icon.Check} onSubmit={handleSubmit} />
+          <Action.SubmitForm<EditProjectFormValues>
+            title="Save Project"
+            icon={Icon.Check}
+            onSubmit={handleSubmit}
+          />
         </ActionPanel>
       }
     >
-      <Form.Description text={`Update the OpenCode settings for ${item.worktree}.`} />
+      <Form.Description
+        text={`Update the OpenCode settings for ${item.worktree}.`}
+      />
       <Form.TextField
         id="name"
         title="Project Name"
@@ -56,10 +62,18 @@ export function EditProjectForm({ item, onSave }: EditProjectFormProps) {
         allowMultipleSelection={false}
         info="Optional. Choose a PNG, JPG, JPEG, SVG, GIF, WEBP, or ICO file."
       />
-      <Form.Dropdown id="iconColor" title="Color" defaultValue={item.iconColor ?? ""}>
+      <Form.Dropdown
+        id="iconColor"
+        title="Color"
+        defaultValue={item.iconColor ?? ""}
+      >
         <Form.Dropdown.Item value="" title="None" />
         {projectColorOptions.map((color) => (
-          <Form.Dropdown.Item key={color} value={color} title={color[0].toUpperCase() + color.slice(1)} />
+          <Form.Dropdown.Item
+            key={color}
+            value={color}
+            title={color[0].toUpperCase() + color.slice(1)}
+          />
         ))}
       </Form.Dropdown>
       <Form.TextArea

@@ -16,7 +16,9 @@ export default async function Command() {
     toast.title = "OpenCode cache synced"
     toast.message = `${items.length} project${items.length === 1 ? "" : "s"}`
 
-    await showHUD(`Synced ${items.length} project${items.length === 1 ? "" : "s"}`)
+    await showHUD(
+      `Synced ${items.length} project${items.length === 1 ? "" : "s"}`,
+    )
   } catch (error) {
     toast.style = Toast.Style.Failure
     toast.title = "Could not sync OpenCode cache"

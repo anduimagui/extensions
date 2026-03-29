@@ -12,7 +12,9 @@ export async function pickPort(host = "127.0.0.1") {
     server.listen(0, host, () => {
       const address = server.address()
       if (!address || typeof address === "string") {
-        server.close(() => reject(new Error("Could not determine an available port")))
+        server.close(() =>
+          reject(new Error("Could not determine an available port")),
+        )
         return
       }
 

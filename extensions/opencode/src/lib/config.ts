@@ -17,7 +17,10 @@ export function extensionPreferences() {
   const preferences = getPreferenceValues<ExtensionPreferences>()
 
   return {
-    cloneDirectory: requiredPreference(preferences.cloneDirectory, "Clone Directory"),
+    cloneDirectory: requiredPreference(
+      preferences.cloneDirectory,
+      "Clone Directory",
+    ),
   }
 }
 

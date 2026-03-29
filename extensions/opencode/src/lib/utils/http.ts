@@ -16,7 +16,10 @@ async function fetchText(url: string | URL, authorization?: string) {
   return text
 }
 
-export async function requestJson<T>(url: string | URL, authorization?: string): Promise<T> {
+export async function requestJson<T>(
+  url: string | URL,
+  authorization?: string,
+): Promise<T> {
   const text = await fetchText(url, authorization)
   if (!text) {
     throw new Error("Expected JSON response but received an empty body")
@@ -45,6 +48,8 @@ export async function waitForHealth(
 
   const details = [lastError, errorContext?.()].filter(Boolean).join("\n")
   throw new Error(
-    details ? `OpenCode server did not become healthy\n${details}` : "OpenCode server did not become healthy",
+    details
+      ? `OpenCode server did not become healthy\n${details}`
+      : "OpenCode server did not become healthy",
   )
 }

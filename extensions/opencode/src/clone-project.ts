@@ -49,7 +49,9 @@ function repositoryName(remoteUrl: string) {
   return name
 }
 
-export default async function Command(props: LaunchProps<{ arguments: Arguments }>) {
+export default async function Command(
+  props: LaunchProps<{ arguments: Arguments }>,
+) {
   const remoteUrl = normalizeRepositoryUrl(props.arguments.repositoryUrl)
 
   if (!remoteUrl) {

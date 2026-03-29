@@ -39,7 +39,11 @@ function opencodeCandidates() {
     "/Applications/OpenCode.app/Contents/MacOS",
     path.join(home, "Applications", "OpenCode.app", "Contents", "MacOS"),
   ]
-  return [...new Set([...pathEntries, ...extras].map((dir) => path.join(dir, "opencode")))]
+  return [
+    ...new Set(
+      [...pathEntries, ...extras].map((dir) => path.join(dir, "opencode")),
+    ),
+  ]
 }
 
 export function opencodePath() {
