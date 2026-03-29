@@ -1,0 +1,55 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "slack-workspaces",
+  "title": "Slack Workspaces",
+  "description": "Search and open local Slack workspaces discovered from the desktop app.",
+  "icon": "icon.png",
+  "author": "mommertf",
+  "categories": [
+    "Communication",
+    "Productivity"
+  ],
+  "keywords": [
+    "slack",
+    "workspaces",
+    "local",
+    "desktop"
+  ],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "search-local-workspaces",
+      "title": "Search Local Workspaces",
+      "subtitle": "Slack Workspaces",
+      "description": "Search local Slack workspaces discovered from the desktop app.",
+      "mode": "view"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.99.4",
+    "@raycast/utils": "^2.0.0"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "^1.0.8",
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.10",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.2",
+    "typescript": "^5.4.5"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "publish": "npx @raycast/api@latest publish"
+  },
+  "volta": {
+    "node": "18.16.0",
+    "npm": "9.6.4"
+  },
+  "platforms": [
+    "macOS",
+    "Windows"
+  ]
+}
