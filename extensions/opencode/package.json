@@ -3,7 +3,7 @@
   "name": "opencode",
   "title": "Opencode Desktop",
   "description": "Search Opencode projects, worktrees, sessions, and docs from Raycast.",
-  "icon": "@assets/icon.png",
+  "icon": "icon.png",
   "author": "anduimagui",
   "license": "MIT",
   "homepage": "https://github.com/anduimagui/opencode-raycast",
@@ -42,7 +42,7 @@
       "title": "Search Projects",
       "subtitle": "Opencode",
       "description": "Search Opencode projects from the local CLI and open them in Opencode.",
-      "icon": "@assets/icon.png",
+      "icon": "icon.png",
       "mode": "view"
     },
     {
@@ -50,7 +50,7 @@
       "title": "Clone Project",
       "subtitle": "Opencode",
       "description": "Clone a Git repository into your configured folder and open it in Opencode.",
-      "icon": "@assets/icon.png",
+      "icon": "icon.png",
       "mode": "no-view",
       "arguments": [
         {
@@ -65,7 +65,7 @@
       "title": "Sync Cache",
       "subtitle": "Opencode",
       "description": "Refresh the cached Opencode project list and icons.",
-      "icon": "@assets/icon.png",
+      "icon": "icon.png",
       "mode": "no-view"
     },
     {
@@ -73,7 +73,7 @@
       "title": "Open Unread Sessions",
       "subtitle": "Opencode",
       "description": "Show Opencode sessions that need attention, using the same dot states as the sidebar.",
-      "icon": "@assets/icon.png",
+      "icon": "icon.png",
       "mode": "view"
     },
     {
@@ -81,7 +81,7 @@
       "title": "Search Worktrees",
       "subtitle": "Opencode",
       "description": "Search Opencode worktrees and open them in Opencode.",
-      "icon": "@assets/icon.png",
+      "icon": "icon.png",
       "mode": "view"
     },
     {
@@ -89,7 +89,7 @@
       "title": "Search Documentation",
       "subtitle": "Opencode",
       "description": "Browse Opencode documentation and open any page in your browser.",
-      "icon": "@assets/icon.png",
+      "icon": "icon.png",
       "mode": "view",
       "preferences": [
         {
