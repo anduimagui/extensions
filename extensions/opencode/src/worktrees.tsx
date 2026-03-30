@@ -2,62 +2,32 @@ import { Action, ActionPanel, Icon, List, Toast, showToast } from "@raycast/api"
 import path from "node:path"
 import { useEffect, useState } from "react"
 import { ProjectListItemActions } from "./components/project-list-item-actions"
-import {
-  useProjectActions,
-  type ProjectListState,
-} from "./hooks/use-project-actions"
-import {
-  loadProjects,
-  readCachedProjects,
-  type Project,
-} from "./lib/project-store"
+import { useProjectActions, type ProjectListState } from "./hooks/use-project-actions"
+import { loadProjects, readCachedProjects, type Project } from "./lib/project-store"
 
 type WorktreeListState = ProjectListState
 
 function worktreeTitle(item: Project) {
-  return (
-    item.worktreeName?.trim() || path.basename(item.worktree) || item.worktree
-  )
+  return item.worktreeName?.trim() || path.basename(item.worktree) || item.worktree
 }
 
 function projectLabel(item: Project, allItems: Project[]) {
-  const byWorktree = new Map(
-    allItems.map((project) => [project.worktree, project]),
-  )
+  const byWorktree = new Map(allItems.map((project) => [project.worktree, project]))
   let current = path.dirname(item.worktree)
 
-  while (
-    current &&
-    current !== item.worktree &&
-    current !== path.dirname(current)
-  ) {
+  while (current && current !== item.worktree && current !== path.dirname(current)) {
     const project = byWorktree.get(current)
-    if (project)
-      return (
-        project.name?.trim() ||
-        path.basename(project.worktree) ||
-        project.worktree
-      )
+    if (project) return project.name?.trim() || path.basename(project.worktree) || project.worktree
     current = path.dirname(current)
   }
 
   const parent = path.basename(path.dirname(item.worktree))
-  return parent && parent !== "." && parent !== path.basename(item.worktree)
-    ? parent
-    : undefined
+  return parent && parent !== "." && parent !== path.basename(item.worktree) ? parent : undefined
 }
 
 function worktreeKeywords(item: Project, project?: string) {
   return [
-    ...new Set(
-      [
-        item.worktree,
-        path.basename(item.worktree),
-        item.worktreeName,
-        item.name,
-        project,
-      ].filter(Boolean),
-    ),
+    ...new Set([item.worktree, path.basename(item.worktree), item.worktreeName, item.name, project].filter(Boolean)),
   ]
 }
 
@@ -67,12 +37,7 @@ export default function Command() {
     excludedItems: [],
     loading: true,
   }))
-  const {
-    toggleFavorite,
-    removeProject,
-    saveProject,
-    chooseAndSaveProjectIcon,
-  } = useProjectActions(set)
+  const { toggleFavorite, removeProject, saveProject, chooseAndSaveProjectIcon } = useProjectActions(set)
 
   useEffect(() => {
     let live = true
@@ -116,20 +81,14 @@ export default function Command() {
 
   if ("err" in state) {
     return (
-      <List
-        isLoading={state.loading}
-        searchBarPlaceholder="OpenCode worktrees unavailable"
-      >
+      <List isLoading={state.loading} searchBarPlaceholder="OpenCode worktrees unavailable">
         <List.EmptyView
           icon={Icon.ExclamationMark}
           title="OpenCode worktrees not available"
           description={state.err}
           actions={
             <ActionPanel>
-              <Action.OpenInBrowser
-                title="Open OpenCode Docs"
-                url="https://opencode.ai"
-              />
+              <Action.OpenInBrowser title="Open OpenCode Docs" url="https://opencode.ai" />
             </ActionPanel>
           }
         />
@@ -138,15 +97,11 @@ export default function Command() {
   }
 
   return (
-    <List
-      isLoading={state.loading}
-      searchBarPlaceholder="Search OpenCode worktrees..."
-    >
+    <List isLoading={state.loading} searchBarPlaceholder="Search OpenCode worktrees...">
       {state.items.map((item) => {
         const project = projectLabel(item, state.items)
         const savedNameDiffers = Boolean(
-          item.worktreeName?.trim() &&
-          item.worktreeName.trim() !== path.basename(item.worktree),
+          item.worktreeName?.trim() && item.worktreeName.trim() !== path.basename(item.worktree),
         )
 
         return (
@@ -164,9 +119,7 @@ export default function Command() {
                     },
                   ]
                 : []),
-              ...(item.isFavorite
-                ? [{ icon: Icon.Star, tooltip: "Favorite" }]
-                : []),
+              ...(item.isFavorite ? [{ icon: Icon.Star, tooltip: "Favorite" }] : []),
               ...(item.sandboxCount
                 ? [
                     {

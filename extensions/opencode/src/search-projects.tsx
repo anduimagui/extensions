@@ -1,25 +1,8 @@
-import {
-  Action,
-  ActionPanel,
-  Cache,
-  Icon,
-  List,
-  Toast,
-  confirmAlert,
-  showToast,
-} from "@raycast/api"
+import { Action, ActionPanel, Cache, Icon, List, Toast, confirmAlert, showToast } from "@raycast/api"
 import { useEffect, useState } from "react"
 import { ProjectListItem } from "./components/project-list-item"
-import {
-  useProjectActions,
-  type ProjectListState,
-} from "./hooks/use-project-actions"
-import {
-  projectAccessoryPath,
-  projectKeywords,
-  projectSubtitle,
-  projectTitle,
-} from "./lib/project"
+import { useProjectActions, type ProjectListState } from "./hooks/use-project-actions"
+import { projectAccessoryPath, projectKeywords, projectSubtitle, projectTitle } from "./lib/project"
 import {
   hydrateProjectIcons,
   loadProjects,
@@ -38,19 +21,14 @@ function readRecentProjectOrder() {
     if (!value) return []
 
     const parsed = JSON.parse(value)
-    return Array.isArray(parsed)
-      ? parsed.filter((item): item is string => typeof item === "string")
-      : []
+    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === "string") : []
   } catch {
     return []
   }
 }
 
 function writeRecentProjectOrder(worktree: string) {
-  const nextOrder = [
-    worktree,
-    ...readRecentProjectOrder().filter((item) => item !== worktree),
-  ]
+  const nextOrder = [worktree, ...readRecentProjectOrder().filter((item) => item !== worktree)]
   projectRecencyCache.set(recentProjectOrderKey, JSON.stringify(nextOrder))
   return nextOrder
 }
@@ -58,9 +36,7 @@ function writeRecentProjectOrder(worktree: string) {
 function sortProjectsByRecentOrder(items: Project[], recentOrder: string[]) {
   if (!recentOrder.length) return items
 
-  const orderIndex = new Map(
-    recentOrder.map((worktree, index) => [worktree, index]),
-  )
+  const orderIndex = new Map(recentOrder.map((worktree, index) => [worktree, index]))
   return [...items].sort((a, b) => {
     const aIndex = orderIndex.get(a.worktree)
     const bIndex = orderIndex.get(b.worktree)
@@ -85,12 +61,7 @@ export default function Command() {
     ...readCachedProjectLists(),
     loading: true,
   }))
-  const {
-    toggleFavorite,
-    removeProject,
-    saveProject,
-    chooseAndSaveProjectIcon,
-  } = useProjectActions(set)
+  const { toggleFavorite, removeProject, saveProject, chooseAndSaveProjectIcon } = useProjectActions(set)
   const items = sortProjectsByRecentOrder(state.items, readRecentProjectOrder())
 
   async function openAndTrackProject(item: Project) {
@@ -131,20 +102,17 @@ export default function Command() {
           loading: false,
         })
 
-        const items = await hydrateProjectIcons(
-          [...data.items, ...data.excludedItems],
-          (hydrated) => {
-            if (!live) return
-            set((current) => {
-              if ("err" in current) return current
-              return {
-                ...current,
-                ...splitHydratedProjects(hydrated, current.excludedItems),
-                loading: false,
-              }
-            })
-          },
-        )
+        const items = await hydrateProjectIcons([...data.items, ...data.excludedItems], (hydrated) => {
+          if (!live) return
+          set((current) => {
+            if ("err" in current) return current
+            return {
+              ...current,
+              ...splitHydratedProjects(hydrated, current.excludedItems),
+              loading: false,
+            }
+          })
+        })
 
         if (!live) return
         set({
@@ -181,20 +149,14 @@ export default function Command() {
 
   if ("err" in state) {
     return (
-      <List
-        isLoading={state.loading}
-        searchBarPlaceholder="OpenCode projects unavailable"
-      >
+      <List isLoading={state.loading} searchBarPlaceholder="OpenCode projects unavailable">
         <List.EmptyView
           icon={Icon.ExclamationMark}
           title="OpenCode projects not available"
           description={state.err}
           actions={
             <ActionPanel>
-              <Action.OpenInBrowser
-                title="Open OpenCode Docs"
-                url="https://opencode.ai"
-              />
+              <Action.OpenInBrowser title="Open OpenCode Docs" url="https://opencode.ai" />
             </ActionPanel>
           }
         />
@@ -203,10 +165,7 @@ export default function Command() {
   }
 
   return (
-    <List
-      isLoading={state.loading}
-      searchBarPlaceholder="Search OpenCode projects..."
-    >
+    <List isLoading={state.loading} searchBarPlaceholder="Search OpenCode projects...">
       <List.Section title="Projects" subtitle={String(items.length)}>
         {items.map((item) => (
           <ProjectListItem
@@ -220,22 +179,15 @@ export default function Command() {
           />
         ))}
       </List.Section>
-      <List.Section
-        title="Excluded Projects"
-        subtitle={String(state.excludedItems.length)}
-      >
+      <List.Section title="Excluded Projects" subtitle={String(state.excludedItems.length)}>
         {state.excludedItems.map((item) => (
           <List.Item
             key={`excluded-${item.id}`}
             title={projectTitle(item)}
             subtitle={projectSubtitle(item)}
             keywords={projectKeywords(item)}
-            accessories={[
-              { text: projectAccessoryPath(item), tooltip: item.worktree },
-            ]}
-            icon={
-              item.icon ? { source: item.icon } : { source: Icon.EyeDisabled }
-            }
+            accessories={[{ text: projectAccessoryPath(item), tooltip: item.worktree }]}
+            icon={item.icon ? { source: item.icon } : { source: Icon.EyeDisabled }}
             actions={
               <ActionPanel>
                 <Action
@@ -245,14 +197,8 @@ export default function Command() {
                     await restoreProject(item)
                   }}
                 />
-                <Action.CopyToClipboard
-                  title="Copy Path"
-                  content={item.worktree}
-                />
-                <Action.ShowInFinder
-                  title="Show in Finder"
-                  path={item.worktree}
-                />
+                <Action.CopyToClipboard title="Copy Path" content={item.worktree} />
+                <Action.ShowInFinder title="Show in Finder" path={item.worktree} />
               </ActionPanel>
             }
           />

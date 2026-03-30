@@ -13,10 +13,7 @@ export function cloneProjectPreferences() {
   const preferences = getPreferenceValues<Preferences.CloneProject>()
 
   return {
-    cloneDirectory: requiredPreference(
-      preferences.cloneDirectory,
-      "Clone Directory",
-    ),
+    cloneDirectory: requiredPreference(preferences.cloneDirectory, "Clone Directory"),
   }
 }
 

@@ -1,16 +1,8 @@
 import { Color, Icon, List } from "@raycast/api"
 import { ProjectListItemActions } from "./project-list-item-actions"
-import {
-  projectAccessoryPath,
-  projectKeywords,
-  projectSubtitle,
-  projectTitle,
-} from "../lib/project"
+import { projectAccessoryPath, projectKeywords, projectSubtitle, projectTitle } from "../lib/project"
 import { type Project } from "../lib/project-store"
-import {
-  type SaveProjectHandler,
-  type SaveProjectIconHandler,
-} from "./project-list-item-actions"
+import { type SaveProjectHandler, type SaveProjectIconHandler } from "./project-list-item-actions"
 
 type ProjectListItemProps = {
   item: Project
@@ -36,9 +28,7 @@ export function ProjectListItem({
       keywords={projectKeywords(item)}
       accessories={[
         { text: projectAccessoryPath(item), tooltip: item.worktree },
-        ...(item.isFavorite
-          ? [{ icon: { source: Icon.Star, tintColor: Color.Yellow } }]
-          : []),
+        ...(item.isFavorite ? [{ icon: { source: Icon.Star, tintColor: Color.Yellow } }] : []),
         ...(item.sandboxCount
           ? [
               {

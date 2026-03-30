@@ -13,7 +13,5 @@ declare module "sql.js" {
     Database: new (data?: Uint8Array) => DB
   }
 
-  export default function initSqlJs(opts?: {
-    locateFile?: (file: string) => string
-  }): Promise<Mod>
+  export default function initSqlJs(opts?: { locateFile?: (file: string) => string }): Promise<Mod>
 }

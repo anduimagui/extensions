@@ -60,13 +60,9 @@ function parseGitWorktrees(stdout: string) {
 }
 
 async function loadRelatedWorktrees(worktree: string) {
-  const { stdout } = await execFileAsync(
-    "git",
-    ["-C", worktree, "worktree", "list", "--porcelain"],
-    {
-      maxBuffer: 1024 * 1024,
-    },
-  )
+  const { stdout } = await execFileAsync("git", ["-C", worktree, "worktree", "list", "--porcelain"], {
+    maxBuffer: 1024 * 1024,
+  })
 
   return parseGitWorktrees(stdout)
 }
@@ -103,11 +99,7 @@ export function RelatedWorktreesList({ item }: { item: Project }) {
         searchBarPlaceholder="Search related worktrees..."
         navigationTitle="Related Worktrees"
       >
-        <List.EmptyView
-          icon={Icon.ExclamationMark}
-          title="Related worktrees unavailable"
-          description={state.err}
-        />
+        <List.EmptyView icon={Icon.ExclamationMark} title="Related worktrees unavailable" description={state.err} />
       </List>
     )
   }
@@ -149,14 +141,8 @@ export function RelatedWorktreesList({ item }: { item: Project }) {
                     await openProject(related.path)
                   }}
                 />
-                <Action.CopyToClipboard
-                  title="Copy Path"
-                  content={related.path}
-                />
-                <Action.ShowInFinder
-                  title="Show in Finder"
-                  path={related.path}
-                />
+                <Action.CopyToClipboard title="Copy Path" content={related.path} />
+                <Action.ShowInFinder title="Show in Finder" path={related.path} />
               </ActionPanel>
             }
           />

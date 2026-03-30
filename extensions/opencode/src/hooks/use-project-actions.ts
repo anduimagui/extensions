@@ -36,12 +36,8 @@ export function useProjectActions(setState: SetProjectListState) {
   }
 
   async function pickProjectIconFile(project: Project) {
-    const prompt = appleScriptString(
-      `Choose an icon for ${projectTitle(project)}`,
-    )
-    const fileTypes = ["png", "jpg", "jpeg", "svg", "gif", "webp", "ico"]
-      .map((ext) => `"${ext}"`)
-      .join(", ")
+    const prompt = appleScriptString(`Choose an icon for ${projectTitle(project)}`)
+    const fileTypes = ["png", "jpg", "jpeg", "svg", "gif", "webp", "ico"].map((ext) => `"${ext}"`).join(", ")
 
     try {
       const { stdout } = await execFileAsync("osascript", [
@@ -51,8 +47,7 @@ export function useProjectActions(setState: SetProjectListState) {
       return stdout.trim() || undefined
     } catch (error) {
       const message = errorMessage(error)
-      if (message.includes("User canceled") || message.includes("-128"))
-        return undefined
+      if (message.includes("User canceled") || message.includes("-128")) return undefined
       throw error
     }
   }
@@ -105,9 +100,7 @@ export function useProjectActions(setState: SetProjectListState) {
         "update project",
         `set name = ${quote(name)}`,
         `, icon_color = ${quote(iconColor)}`,
-        startupCommand
-          ? `, commands = json_object('start', ${quote(startupCommand)})`
-          : ", commands = null",
+        startupCommand ? `, commands = json_object('start', ${quote(startupCommand)})` : ", commands = null",
         `where worktree = ${quote(item.worktree)}`,
       ].join(" ")
 
@@ -134,15 +127,11 @@ export function useProjectActions(setState: SetProjectListState) {
         name !== (item.name ?? "") ? "name" : undefined,
         iconPath ? "icon" : undefined,
         iconColor !== (item.iconColor ?? "") ? "color" : undefined,
-        startupCommand !== (item.startupCommand ?? "")
-          ? "startup script"
-          : undefined,
+        startupCommand !== (item.startupCommand ?? "") ? "startup script" : undefined,
       ].filter(Boolean)
 
       toast.style = Toast.Style.Success
-      toast.title = changedParts.length
-        ? `Updated ${changedParts.join(", ")}`
-        : "Project details saved"
+      toast.title = changedParts.length ? `Updated ${changedParts.join(", ")}` : "Project details saved"
       toast.message = projectTitle({ ...item, name: name || undefined })
       return true
     } catch (error) {

@@ -1,16 +1,10 @@
 import { Action, ActionPanel, Icon } from "@raycast/api"
-import {
-  EditProjectForm,
-  type EditProjectFormValues,
-} from "./edit-project-form"
+import { EditProjectForm, type EditProjectFormValues } from "./edit-project-form"
 import { RelatedWorktreesList } from "./related-worktrees-list"
 import { openProject, openProjectRemote } from "../lib/opencode"
 import { type Project } from "../lib/project-store"
 
-export type SaveProjectHandler = (
-  project: Project,
-  values: EditProjectFormValues,
-) => Promise<boolean>
+export type SaveProjectHandler = (project: Project, values: EditProjectFormValues) => Promise<boolean>
 export type SaveProjectIconHandler = (project: Project) => Promise<boolean>
 
 type ProjectListItemActionsProps = {

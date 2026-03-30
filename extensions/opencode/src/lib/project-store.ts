@@ -1,12 +1,6 @@
 import { Color } from "@raycast/api"
 import { execFile, spawn } from "node:child_process"
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  readdirSync,
-  writeFileSync,
-} from "node:fs"
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs"
 import path from "node:path"
 import { promisify } from "node:util"
 import { extensionPaths } from "./config"
@@ -17,15 +11,7 @@ import { quote } from "./utils/sql"
 
 const execFileAsync = promisify(execFile)
 const paths = extensionPaths()
-const projectIconExtensions = [
-  "png",
-  "jpg",
-  "jpeg",
-  "svg",
-  "gif",
-  "webp",
-  "ico",
-]
+const projectIconExtensions = ["png", "jpg", "jpeg", "svg", "gif", "webp", "ico"]
 const iconHydrationBatchSize = 24
 const iconHydrationPriorityCount = 40
 
@@ -137,10 +123,7 @@ function writeJsonFile(filePath: string, value: unknown) {
 }
 
 function getIconManifest() {
-  iconManifestCache ??= readJsonFile<Record<string, string>>(
-    paths.iconManifestPath,
-    {},
-  )
+  iconManifestCache ??= readJsonFile<Record<string, string>>(paths.iconManifestPath, {})
   return iconManifestCache
 }
 
@@ -161,9 +144,7 @@ function writeFavorites(favorites: Set<string>) {
 }
 
 function getExcludedProjects() {
-  excludedProjectsCache ??= new Set(
-    readJsonFile<string[]>(paths.excludedProjectsPath, []),
-  )
+  excludedProjectsCache ??= new Set(readJsonFile<string[]>(paths.excludedProjectsPath, []))
   return excludedProjectsCache
 }
 
@@ -217,16 +198,11 @@ function writeProjectIndex(items: Project[]) {
   )
 }
 
-function favoriteKeys(
-  project: Pick<Project, "id" | "worktree" | "relatedIds">,
-) {
+function favoriteKeys(project: Pick<Project, "id" | "worktree" | "relatedIds">) {
   return [project.worktree, project.id, ...project.relatedIds]
 }
 
-function isProjectFavorite(
-  favorites: Set<string>,
-  project: Pick<Project, "id" | "worktree" | "relatedIds">,
-) {
+function isProjectFavorite(favorites: Set<string>, project: Pick<Project, "id" | "worktree" | "relatedIds">) {
   return favoriteKeys(project).some((key) => favorites.has(key))
 }
 
@@ -238,10 +214,8 @@ function tint(input: string | null | undefined) {
   if (key.includes("yellow")) return Color.Yellow
   if (key.includes("green")) return Color.Green
   if (key.includes("blue")) return Color.Blue
-  if (key.includes("magenta") || key.includes("pink") || key.includes("purple"))
-    return Color.Magenta
-  if (key.includes("secondary") || key.includes("gray") || key.includes("grey"))
-    return Color.SecondaryText
+  if (key.includes("magenta") || key.includes("pink") || key.includes("purple")) return Color.Magenta
+  if (key.includes("secondary") || key.includes("gray") || key.includes("grey")) return Color.SecondaryText
   return undefined
 }
 
@@ -269,9 +243,7 @@ function dedupeProjects(items: Project[]) {
       continue
     }
 
-    const mergedRelatedIds = [
-      ...new Set([...existing.relatedIds, ...item.relatedIds]),
-    ]
+    const mergedRelatedIds = [...new Set([...existing.relatedIds, ...item.relatedIds])]
     const keepCurrent =
       item.isFavorite !== existing.isFavorite
         ? item.isFavorite
@@ -345,8 +317,7 @@ function iconExtension(mime: string) {
   if (mime === "image/jpeg") return "jpg"
   if (mime === "image/gif") return "gif"
   if (mime === "image/webp") return "webp"
-  if (mime === "image/vnd.microsoft.icon" || mime === "image/x-icon")
-    return "ico"
+  if (mime === "image/vnd.microsoft.icon" || mime === "image/x-icon") return "ico"
   return "img"
 }
 
@@ -371,11 +342,7 @@ function cacheIconFile(id: string, ext: string, data: Buffer) {
 function storeCachedIcon(id: string, iconUrl: string) {
   const parsed = dataUrlParts(iconUrl)
   if (!parsed) return undefined
-  return cacheIconFile(
-    id,
-    iconExtension(parsed.mime),
-    Buffer.from(parsed.data, "base64"),
-  )
+  return cacheIconFile(id, iconExtension(parsed.mime), Buffer.from(parsed.data, "base64"))
 }
 
 function discoverProjectIcon(worktree: string) {
@@ -387,10 +354,7 @@ function discoverProjectIcon(worktree: string) {
   }
 
   try {
-    const pattern = new RegExp(
-      `^icon\\.(${projectIconExtensions.join("|")})$`,
-      "i",
-    )
+    const pattern = new RegExp(`^icon\\.(${projectIconExtensions.join("|")})$`, "i")
     const file = readdirSync(settingsDir).find((name) => pattern.test(name))
     if (file) return path.join(settingsDir, file)
   } catch {
@@ -420,15 +384,11 @@ function parseTsv(input: string) {
   const columns = header.split("\t")
   return rows.map((row) => {
     const values = row.split("\t")
-    return Object.fromEntries(
-      columns.map((column, index) => [column, values[index] ?? ""]),
-    )
+    return Object.fromEntries(columns.map((column, index) => [column, values[index] ?? ""]))
   })
 }
 
-async function withServer<T>(
-  run: (baseUrl: string, authorization: string) => Promise<T>,
-) {
+async function withServer<T>(run: (baseUrl: string, authorization: string) => Promise<T>) {
   const port = await pickPort()
   const username = "raycast"
   const password = `raycast-${process.pid}-${Date.now()}`
@@ -436,18 +396,14 @@ async function withServer<T>(
   const baseUrl = `http://127.0.0.1:${port}`
   let stderr = ""
 
-  const child = spawn(
-    opencodePath(),
-    ["serve", "--hostname", "127.0.0.1", "--port", String(port)],
-    {
-      env: {
-        ...process.env,
-        OPENCODE_SERVER_PASSWORD: password,
-        OPENCODE_SERVER_USERNAME: username,
-      },
-      stdio: ["ignore", "ignore", "pipe"],
+  const child = spawn(opencodePath(), ["serve", "--hostname", "127.0.0.1", "--port", String(port)], {
+    env: {
+      ...process.env,
+      OPENCODE_SERVER_PASSWORD: password,
+      OPENCODE_SERVER_USERNAME: username,
     },
-  )
+    stdio: ["ignore", "ignore", "pipe"],
+  })
 
   child.stderr?.on("data", (chunk) => {
     stderr += chunk.toString("utf8")
@@ -461,11 +417,7 @@ async function withServer<T>(
     if (!child.killed) child.kill("SIGTERM")
   }
 }
-function sessionState(
-  status: SessionStatus | undefined,
-  permission: boolean,
-  waiting: boolean,
-) {
+function sessionState(status: SessionStatus | undefined, permission: boolean, waiting: boolean) {
   if (permission) return "permission"
   if (status?.type === "busy") return "working"
   if (status?.type === "retry") return "error"
@@ -523,20 +475,13 @@ async function listProjectSessions(projectIds: string[]) {
     "order by coalesce(s.time_updated, s.time_created) desc",
   ].join(" ")
 
-  const { stdout } = await execFileAsync(
-    opencodePath(),
-    ["db", query, "--format", "tsv"],
-    {
-      maxBuffer: 1024 * 1024 * 8,
-    },
-  )
+  const { stdout } = await execFileAsync(opencodePath(), ["db", query, "--format", "tsv"], {
+    maxBuffer: 1024 * 1024 * 8,
+  })
 
   return parseTsv(stdout)
-    .filter(
-      (
-        row,
-      ): row is Record<string, string> & { id: string; project_id: string } =>
-        Boolean(row.id && row.project_id),
+    .filter((row): row is Record<string, string> & { id: string; project_id: string } =>
+      Boolean(row.id && row.project_id),
     )
     .map((row) => ({
       id: row.id,
@@ -555,20 +500,12 @@ async function resolveSessionPreviewTitles(items: Project[]) {
     const previews = await withServer(async (baseUrl, authorization) => {
       const [projects, statuses, permissions, sessions] = await Promise.all([
         requestJson<ApiProject[]>(new URL("/project", baseUrl), authorization),
-        requestJson<Record<string, SessionStatus>>(
-          new URL("/session/status", baseUrl),
-          authorization,
-        ),
-        requestJson<Permission[]>(
-          new URL("/permission", baseUrl),
-          authorization,
-        ),
+        requestJson<Record<string, SessionStatus>>(new URL("/session/status", baseUrl), authorization),
+        requestJson<Permission[]>(new URL("/permission", baseUrl), authorization),
         listProjectSessions(projectIds),
       ])
 
-      const knownProjectIds = new Set(
-        projects.flatMap((project) => (project.id ? [project.id] : [])),
-      )
+      const knownProjectIds = new Set(projects.flatMap((project) => (project.id ? [project.id] : [])))
       const pending = new Set(permissions.map((item) => item.sessionID))
       const sessionsByProject = new Map<string, ProjectSessionRow[]>()
 
@@ -587,17 +524,11 @@ async function resolveSessionPreviewTitles(items: Project[]) {
               title: normalizePreviewTitle(session.title),
               updatedAt: Number(session.updated_at) || 0,
               priority: sessionPriority(
-                sessionState(
-                  statuses[session.id],
-                  pending.has(session.id),
-                  Number(session.waiting) > 0,
-                ),
+                sessionState(statuses[session.id], pending.has(session.id), Number(session.waiting) > 0),
               ),
             }))
             .filter((session) => session.title)
-            .sort(
-              (a, b) => b.priority - a.priority || b.updatedAt - a.updatedAt,
-            )[0]
+            .sort((a, b) => b.priority - a.priority || b.updatedAt - a.updatedAt)[0]
 
           return [item.id, preferred?.title || fallback]
         }),
@@ -631,18 +562,12 @@ async function loadSessionOnlyProjects(favorites: Set<string>) {
     "order by max(coalesce(time_updated, time_created)) desc, directory asc",
   ].join(" ")
 
-  const { stdout } = await execFileAsync(
-    opencodePath(),
-    ["db", query, "--format", "tsv"],
-    {
-      maxBuffer: 1024 * 1024 * 4,
-    },
-  )
+  const { stdout } = await execFileAsync(opencodePath(), ["db", query, "--format", "tsv"], {
+    maxBuffer: 1024 * 1024 * 4,
+  })
 
   return parseTsv(stdout)
-    .filter((row): row is SessionDirectoryRow =>
-      Boolean(row.id && row.directory),
-    )
+    .filter((row): row is SessionDirectoryRow => Boolean(row.id && row.directory))
     .map((row) => {
       const relatedIds = [row.id]
       return {
@@ -656,9 +581,7 @@ async function loadSessionOnlyProjects(favorites: Set<string>) {
         tint: undefined,
         startupCommand: undefined,
         sandboxCount: 0,
-        updatedAt: row.time_updated
-          ? Number(row.time_updated) || undefined
-          : undefined,
+        updatedAt: row.time_updated ? Number(row.time_updated) || undefined : undefined,
         hasIcon: false,
         isSessionOnly: true,
         isFavorite: isProjectFavorite(favorites, {
@@ -684,9 +607,7 @@ function toProject(row: ProjectRow, favorites: Set<string>): Project {
     tint: tint(row.icon_color),
     startupCommand: row.startup_command || undefined,
     sandboxCount: Number(row.sandbox_count) || 0,
-    updatedAt: row.time_updated
-      ? Number(row.time_updated) || undefined
-      : undefined,
+    updatedAt: row.time_updated ? Number(row.time_updated) || undefined : undefined,
     hasIcon: Number(row.has_icon) > 0,
     isSessionOnly: false,
     isFavorite: isProjectFavorite(favorites, {
@@ -698,10 +619,7 @@ function toProject(row: ProjectRow, favorites: Set<string>): Project {
   }
 }
 
-function cachedProjectToProject(
-  record: CachedProject,
-  favorites: Set<string>,
-): Project {
+function cachedProjectToProject(record: CachedProject, favorites: Set<string>): Project {
   const relatedIds = record.relatedIds?.length ? record.relatedIds : [record.id]
   return {
     id: record.id,
@@ -732,17 +650,11 @@ export function readCachedProjects() {
 
 function readAllCachedProjects() {
   const favorites = getFavorites()
-  return sortProjects(
-    dedupeProjects(
-      readProjectIndex().map((item) => cachedProjectToProject(item, favorites)),
-    ),
-  )
+  return sortProjects(dedupeProjects(readProjectIndex().map((item) => cachedProjectToProject(item, favorites))))
 }
 
 function writeMergedProjectIndex(items: Project[]) {
-  const byWorktree = new Map(
-    readAllCachedProjects().map((item) => [item.worktree, item]),
-  )
+  const byWorktree = new Map(readAllCachedProjects().map((item) => [item.worktree, item]))
   for (const item of items) byWorktree.set(item.worktree, item)
   writeProjectIndex(sortProjects([...byWorktree.values()]))
 }
@@ -765,13 +677,9 @@ export async function loadProjects() {
     "order by coalesce(time_updated, 0) desc, coalesce(name, worktree) asc",
   ].join(" ")
 
-  const { stdout } = await execFileAsync(
-    opencodePath(),
-    ["db", query, "--format", "tsv"],
-    {
-      maxBuffer: 1024 * 1024 * 4,
-    },
-  )
+  const { stdout } = await execFileAsync(opencodePath(), ["db", query, "--format", "tsv"], {
+    maxBuffer: 1024 * 1024 * 4,
+  })
 
   const items = sortProjects(
     dedupeProjects([
@@ -798,13 +706,9 @@ async function fetchRemoteIcons(items: Project[]) {
     `where id in (${ids.map(quote).join(", ")}) and icon_url is not null and icon_url != ''`,
   ].join(" ")
 
-  const { stdout } = await execFileAsync(
-    opencodePath(),
-    ["db", query, "--format", "tsv"],
-    {
-      maxBuffer: 1024 * 1024 * 8,
-    },
-  )
+  const { stdout } = await execFileAsync(opencodePath(), ["db", query, "--format", "tsv"], {
+    maxBuffer: 1024 * 1024 * 8,
+  })
 
   return new Map(
     parseTsv(stdout)
@@ -852,10 +756,7 @@ async function hydrateIconBatch(items: Project[]) {
   }
 }
 
-export async function hydrateProjectIcons(
-  items: Project[],
-  onUpdate?: HydrationUpdate,
-) {
+export async function hydrateProjectIcons(items: Project[], onUpdate?: HydrationUpdate) {
   const next = items.map((item) => ({ ...item }))
   const pending = prioritizeHydration(next.filter((item) => !item.icon))
   if (!pending.length) return next
@@ -868,30 +769,18 @@ export async function hydrateProjectIcons(
     onUpdate?.([...next])
   }
 
-  for (
-    let index = 0;
-    index < remainder.length;
-    index += iconHydrationBatchSize
-  ) {
-    await hydrateIconBatch(
-      remainder.slice(index, index + iconHydrationBatchSize),
-    )
+  for (let index = 0; index < remainder.length; index += iconHydrationBatchSize) {
+    await hydrateIconBatch(remainder.slice(index, index + iconHydrationBatchSize))
     onUpdate?.([...next])
   }
 
   return next
 }
 
-export function renameProjectInCache(
-  items: Project[],
-  project: Pick<Project, "worktree">,
-  name?: string,
-) {
+export function renameProjectInCache(items: Project[], project: Pick<Project, "worktree">, name?: string) {
   const nextName = name?.trim() || undefined
   const next = sortProjects(
-    items.map((item) =>
-      item.worktree === project.worktree ? { ...item, name: nextName } : item,
-    ),
+    items.map((item) => (item.worktree === project.worktree ? { ...item, name: nextName } : item)),
   )
   writeMergedProjectIndex(next)
   return next
@@ -920,16 +809,11 @@ export function updateProjectInCache(
   return next
 }
 
-export function toggleFavoriteProject(
-  items: Project[],
-  project: Pick<Project, "id" | "worktree" | "relatedIds">,
-) {
+export function toggleFavoriteProject(items: Project[], project: Pick<Project, "id" | "worktree" | "relatedIds">) {
   const favorites = new Set(getFavorites())
   const key = project.worktree
   const keysToClear = favoriteKeys(project)
-  const alreadyFavorite = keysToClear.some((favoriteKey) =>
-    favorites.has(favoriteKey),
-  )
+  const alreadyFavorite = keysToClear.some((favoriteKey) => favorites.has(favoriteKey))
 
   for (const favoriteKey of keysToClear) favorites.delete(favoriteKey)
   if (!alreadyFavorite) favorites.add(key)
@@ -937,20 +821,14 @@ export function toggleFavoriteProject(
   writeFavorites(favorites)
   return sortProjects(
     items.map((item) =>
-      item.worktree === project.worktree
-        ? { ...item, isFavorite: isProjectFavorite(favorites, item) }
-        : item,
+      item.worktree === project.worktree ? { ...item, isFavorite: isProjectFavorite(favorites, item) } : item,
     ),
   )
 }
 
-export function removeProjectFromCache(
-  items: Project[],
-  project: Pick<Project, "id" | "worktree">,
-) {
+export function removeProjectFromCache(items: Project[], project: Pick<Project, "id" | "worktree">) {
   const favorites = new Set(getFavorites())
-  const removed =
-    favorites.delete(project.worktree) || favorites.delete(project.id)
+  const removed = favorites.delete(project.worktree) || favorites.delete(project.id)
   if (removed) writeFavorites(favorites)
 
   const excludedProjects = new Set(getExcludedProjects())
@@ -968,11 +846,7 @@ export function restoreExcludedProject(project: Pick<Project, "worktree">) {
   writeExcludedProjects(excludedProjects)
 }
 
-export async function saveProjectIcon(
-  items: Project[],
-  project: Pick<Project, "id" | "worktree">,
-  iconPath: string,
-) {
+export async function saveProjectIcon(items: Project[], project: Pick<Project, "id" | "worktree">, iconPath: string) {
   const ext = path.extname(iconPath).slice(1).toLowerCase()
   if (!projectIconExtensions.includes(ext)) {
     throw new Error("Use PNG, JPG, JPEG, SVG, GIF, WEBP, or ICO")
@@ -990,9 +864,7 @@ export async function saveProjectIcon(
 
   const cachedIcon = cacheProjectIcon(project.id, iconPath)
   const next = items.map((item) =>
-    item.worktree === project.worktree
-      ? { ...item, icon: cachedIcon, hasIcon: true }
-      : item,
+    item.worktree === project.worktree ? { ...item, icon: cachedIcon, hasIcon: true } : item,
   )
   writeMergedProjectIndex(next)
   return next

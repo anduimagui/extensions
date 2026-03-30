@@ -1,18 +1,10 @@
-import {
-  Action,
-  ActionPanel,
-  Detail,
-  getPreferenceValues,
-  Icon,
-  List,
-} from "@raycast/api"
+import { Action, ActionPanel, Detail, getPreferenceValues, Icon, List } from "@raycast/api"
 import { useEffect, useMemo, useState } from "react"
 
 const DOCS_HOME_URL = "https://opencode.ai/docs/"
 const SITEMAP_URL = "https://opencode.ai/sitemap.xml"
 const DEFAULT_LOCALE = "en"
-const DOCS_REPO_RAW_BASE =
-  "https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs"
+const DOCS_REPO_RAW_BASE = "https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs"
 
 const KNOWN_LOCALES = new Set([
   "ar",
@@ -64,9 +56,7 @@ function titleFromSlug(slug: string) {
 
 function normalizeDocsUrl(raw: string) {
   const url = new URL(raw)
-  const pathname = url.pathname.endsWith("/")
-    ? url.pathname
-    : `${url.pathname}/`
+  const pathname = url.pathname.endsWith("/") ? url.pathname : `${url.pathname}/`
   return `${url.origin}${pathname}`
 }
 
@@ -77,17 +67,13 @@ function toDocItem(rawUrl: string): DocItem | undefined {
 
   const docsSegments = segments.slice(1)
   const maybeLocale = docsSegments[0]
-  const locale =
-    maybeLocale && KNOWN_LOCALES.has(maybeLocale) ? maybeLocale : DEFAULT_LOCALE
-  const contentSegments =
-    locale === DEFAULT_LOCALE ? docsSegments : docsSegments.slice(1)
+  const locale = maybeLocale && KNOWN_LOCALES.has(maybeLocale) ? maybeLocale : DEFAULT_LOCALE
+  const contentSegments = locale === DEFAULT_LOCALE ? docsSegments : docsSegments.slice(1)
 
   const slug = contentSegments.join("/")
   const title = titleFromSlug(contentSegments.at(-1) || "")
   const pathLabel =
-    locale === DEFAULT_LOCALE
-      ? `docs${slug ? `/${slug}` : ""}`
-      : `docs/${locale}${slug ? `/${slug}` : ""}`
+    locale === DEFAULT_LOCALE ? `docs${slug ? `/${slug}` : ""}` : `docs/${locale}${slug ? `/${slug}` : ""}`
 
   return {
     title,
@@ -110,12 +96,7 @@ function sourceCandidatesForDoc(item: DocItem) {
   }
 
   const clean = route.replace(/\/$/, "")
-  return [
-    `${clean}.mdx`,
-    `${clean}.md`,
-    `${clean}/index.mdx`,
-    `${clean}/index.md`,
-  ]
+  return [`${clean}.mdx`, `${clean}.md`, `${clean}/index.mdx`, `${clean}/index.md`]
 }
 
 async function fetchMarkdownSource(item: DocItem) {
@@ -162,9 +143,7 @@ function PreviewDetail({ item }: { item: DocItem }) {
     }
   }, [item])
 
-  const markdown = state.error
-    ? `${state.markdown}\n\n---\n\n${state.error}`
-    : state.markdown
+  const markdown = state.error ? `${state.markdown}\n\n---\n\n${state.error}` : state.markdown
 
   return (
     <Detail
@@ -235,9 +214,7 @@ export default function Command() {
   const preferences = getPreferenceValues<Preferences.SearchDocumentation>()
   const selectedLocale = useMemo(() => {
     const value = (preferences.docsLocale || DEFAULT_LOCALE).toLowerCase()
-    return value === DEFAULT_LOCALE || KNOWN_LOCALES.has(value)
-      ? value
-      : DEFAULT_LOCALE
+    return value === DEFAULT_LOCALE || KNOWN_LOCALES.has(value) ? value : DEFAULT_LOCALE
   }, [preferences.docsLocale])
 
   const [state, setState] = useState<State>({ loading: true, items: [] })
@@ -266,20 +243,14 @@ export default function Command() {
 
   if (state.error) {
     return (
-      <List
-        isLoading={state.loading}
-        searchBarPlaceholder="OpenCode documentation unavailable"
-      >
+      <List isLoading={state.loading} searchBarPlaceholder="OpenCode documentation unavailable">
         <List.EmptyView
           icon={Icon.ExclamationMark}
           title="Could not load documentation"
           description={state.error}
           actions={
             <ActionPanel>
-              <Action.OpenInBrowser
-                title="Open OpenCode Docs"
-                url={DOCS_HOME_URL}
-              />
+              <Action.OpenInBrowser title="Open OpenCode Docs" url={DOCS_HOME_URL} />
             </ActionPanel>
           }
         />
@@ -288,10 +259,7 @@ export default function Command() {
   }
 
   return (
-    <List
-      isLoading={state.loading}
-      searchBarPlaceholder={`Search OpenCode documentation (${selectedLocale})...`}
-    >
+    <List isLoading={state.loading} searchBarPlaceholder={`Search OpenCode documentation (${selectedLocale})...`}>
       {state.items.map((doc) => (
         <List.Item
           key={doc.url}
@@ -301,20 +269,14 @@ export default function Command() {
           keywords={doc.keywords}
           actions={
             <ActionPanel>
-              <Action.Push
-                title="Preview Markdown"
-                target={<PreviewDetail item={doc} />}
-              />
+              <Action.Push title="Preview Markdown" target={<PreviewDetail item={doc} />} />
               <Action.OpenInBrowser
                 title="Open in Browser"
                 url={doc.url}
                 shortcut={{ modifiers: ["cmd"], key: "enter" }}
               />
               <Action.CopyToClipboard title="Copy URL" content={doc.url} />
-              <Action.CopyToClipboard
-                title="Copy Path"
-                content={doc.pathLabel}
-              />
+              <Action.CopyToClipboard title="Copy Path" content={doc.pathLabel} />
             </ActionPanel>
           }
         />

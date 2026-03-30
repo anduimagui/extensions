@@ -56,9 +56,7 @@ function parseTsv(input: string) {
   })
 }
 
-async function withServer<T>(
-  run: (baseUrl: string, authorization: string) => Promise<T>,
-) {
+async function withServer<T>(run: (baseUrl: string, authorization: string) => Promise<T>) {
   const port = await pickPort()
   const username = "raycast"
   const password = `raycast-${process.pid}-${Date.now()}`
@@ -66,18 +64,14 @@ async function withServer<T>(
   const baseUrl = `http://127.0.0.1:${port}`
   let stderr = ""
 
-  const child = spawn(
-    opencodePath(),
-    ["serve", "--hostname", "127.0.0.1", "--port", String(port)],
-    {
-      env: {
-        ...process.env,
-        OPENCODE_SERVER_PASSWORD: password,
-        OPENCODE_SERVER_USERNAME: username,
-      },
-      stdio: ["ignore", "ignore", "pipe"],
+  const child = spawn(opencodePath(), ["serve", "--hostname", "127.0.0.1", "--port", String(port)], {
+    env: {
+      ...process.env,
+      OPENCODE_SERVER_PASSWORD: password,
+      OPENCODE_SERVER_USERNAME: username,
     },
-  )
+    stdio: ["ignore", "ignore", "pipe"],
+  })
 
   child.stderr?.on("data", (chunk) => {
     stderr += chunk.toString("utf8")
@@ -125,20 +119,13 @@ async function listSessions(projectIds: string[]) {
     "limit 200",
   ].join(" ")
 
-  const { stdout } = await execFileAsync(
-    opencodePath(),
-    ["db", query, "--format", "tsv"],
-    {
-      maxBuffer: 1024 * 1024 * 4,
-    },
-  )
+  const { stdout } = await execFileAsync(opencodePath(), ["db", query, "--format", "tsv"], {
+    maxBuffer: 1024 * 1024 * 4,
+  })
 
   return parseTsv(stdout)
-    .filter(
-      (
-        row,
-      ): row is Record<string, string> & { id: string; directory: string } =>
-        Boolean(row.id && row.directory),
+    .filter((row): row is Record<string, string> & { id: string; directory: string } =>
+      Boolean(row.id && row.directory),
     )
     .map((row) => ({
       id: row.id,
@@ -149,11 +136,7 @@ async function listSessions(projectIds: string[]) {
     }))
 }
 
-function state(
-  status: SessionStatus | undefined,
-  permission: boolean,
-  waiting: boolean,
-) {
+function state(status: SessionStatus | undefined, permission: boolean, waiting: boolean) {
   if (permission) return "permission"
   if (status?.type === "retry") return "error"
   if (waiting) return "unread"
@@ -162,12 +145,9 @@ function state(
 }
 
 function badge(state: Item["state"]) {
-  if (state === "permission")
-    return { source: Icon.CircleFilled, tintColor: Color.Orange }
-  if (state === "error")
-    return { source: Icon.CircleFilled, tintColor: Color.Red }
-  if (state === "unread")
-    return { source: Icon.CircleFilled, tintColor: Color.Blue }
+  if (state === "permission") return { source: Icon.CircleFilled, tintColor: Color.Orange }
+  if (state === "error") return { source: Icon.CircleFilled, tintColor: Color.Red }
+  if (state === "unread") return { source: Icon.CircleFilled, tintColor: Color.Blue }
   return { source: Icon.CircleFilled, tintColor: Color.SecondaryText }
 }
 
@@ -186,10 +166,7 @@ async function load() {
   return withServer(async (baseUrl, authorization) => {
     const [projects, status, permissions] = await Promise.all([
       requestJson<ApiProject[]>(new URL("/project", baseUrl), authorization),
-      requestJson<Record<string, SessionStatus>>(
-        new URL("/session/status", baseUrl),
-        authorization,
-      ),
+      requestJson<Record<string, SessionStatus>>(new URL("/session/status", baseUrl), authorization),
       requestJson<Permission[]>(new URL("/permission", baseUrl), authorization),
     ])
 
@@ -200,11 +177,7 @@ async function load() {
       .flatMap<Item>((row) => {
         if (!row.directory) return []
 
-        const next = state(
-          status[row.id],
-          pending.has(row.id),
-          Number(row.waiting) > 0,
-        )
+        const next = state(status[row.id], pending.has(row.id), Number(row.waiting) > 0)
         if (!next) return []
 
         return [
@@ -251,24 +224,14 @@ export default function Command() {
 
   if (view.err) {
     return (
-      <List
-        isLoading={view.loading}
-        searchBarPlaceholder="OpenCode sessions unavailable"
-      >
-        <List.EmptyView
-          icon={Icon.ExclamationMark}
-          title="OpenCode sessions not available"
-          description={view.err}
-        />
+      <List isLoading={view.loading} searchBarPlaceholder="OpenCode sessions unavailable">
+        <List.EmptyView icon={Icon.ExclamationMark} title="OpenCode sessions not available" description={view.err} />
       </List>
     )
   }
 
   return (
-    <List
-      isLoading={view.loading}
-      searchBarPlaceholder="Search sessions needing attention..."
-    >
+    <List isLoading={view.loading} searchBarPlaceholder="Search sessions needing attention...">
       {!view.loading && view.items.length === 0 ? (
         <List.EmptyView
           title="No sessions need attention"
@@ -280,9 +243,7 @@ export default function Command() {
           key={item.id}
           title={item.title}
           subtitle={item.directory}
-          accessories={[
-            { icon: badge(item.state), tooltip: label(item.state) },
-          ]}
+          accessories={[{ icon: badge(item.state), tooltip: label(item.state) }]}
           actions={
             <ActionPanel>
               <Action
@@ -292,14 +253,8 @@ export default function Command() {
                   await openProject(item.directory)
                 }}
               />
-              <Action.CopyToClipboard
-                title="Copy Path"
-                content={item.directory}
-              />
-              <Action.ShowInFinder
-                title="Show in Finder"
-                path={item.directory}
-              />
+              <Action.CopyToClipboard title="Copy Path" content={item.directory} />
+              <Action.ShowInFinder title="Show in Finder" path={item.directory} />
             </ActionPanel>
           }
         />

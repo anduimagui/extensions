@@ -11,9 +11,7 @@ export function remoteToBrowserUrl(input: string) {
     return value.replace(/\.git$/, "")
   }
 
-  const sshMatch = /^(?:ssh:\/\/)?git@([^:/]+)[:/]([^\s]+?)(?:\.git)?$/.exec(
-    value,
-  )
+  const sshMatch = /^(?:ssh:\/\/)?git@([^:/]+)[:/]([^\s]+?)(?:\.git)?$/.exec(value)
   if (sshMatch) {
     return `https://${sshMatch[1]}/${sshMatch[2]}`
   }
