@@ -3,7 +3,7 @@ import { execFile } from "node:child_process"
 import { access, mkdir } from "node:fs/promises"
 import path from "node:path"
 import { promisify } from "node:util"
-import { extensionPreferences } from "./lib/config"
+import { cloneProjectPreferences } from "./lib/config"
 import { openProject } from "./lib/opencode"
 import { errorMessage } from "./lib/utils/error"
 
@@ -63,7 +63,7 @@ export default async function Command(
     return
   }
 
-  const preferences = extensionPreferences()
+  const preferences = cloneProjectPreferences()
   const projectName = repositoryName(remoteUrl)
   const targetDirectory = path.join(preferences.cloneDirectory, projectName)
 

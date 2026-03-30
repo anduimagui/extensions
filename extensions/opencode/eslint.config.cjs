@@ -1,26 +1,9 @@
-const js = require("@eslint/js")
-const globals = require("globals")
-const parser = require("@typescript-eslint/parser")
+const { defineConfig } = require("eslint/config")
+const raycastConfig = require("@raycast/eslint-config")
 
-module.exports = [
+module.exports = defineConfig([
   {
-    ignores: ["dist", "node_modules", "**/*.d.ts"],
+    ignores: ["dist", "node_modules"],
   },
-  js.configs.recommended,
-  {
-    files: ["**/*.{ts,tsx}"],
-    languageOptions: {
-      parser,
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-        ecmaVersion: 2023,
-        sourceType: "module",
-      },
-      globals: {
-        ...globals.node,
-      },
-    },
-  },
-]
+  ...raycastConfig,
+])

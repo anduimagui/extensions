@@ -7,7 +7,6 @@ import { RelatedWorktreesList } from "./related-worktrees-list"
 import { openProject, openProjectRemote } from "../lib/opencode"
 import { type Project } from "../lib/project-store"
 
-/* eslint-disable no-unused-vars */
 export type SaveProjectHandler = (
   project: Project,
   values: EditProjectFormValues,
@@ -22,7 +21,6 @@ type ProjectListItemActionsProps = {
   onSaveProject: SaveProjectHandler
   onSaveProjectIcon: SaveProjectIconHandler
 }
-/* eslint-enable no-unused-vars */
 
 export function ProjectListItemActions({
   item,
@@ -61,11 +59,6 @@ export function ProjectListItemActions({
         title="Edit Project"
         icon={Icon.Pencil}
         shortcut={{ modifiers: ["cmd"], key: "r" }}
-        target={<EditProjectForm item={item} onSave={onSaveProject} />}
-      />
-      <Action.Push
-        title="Rename Project"
-        icon={Icon.TextCursor}
         target={<EditProjectForm item={item} onSave={onSaveProject} />}
       />
       <Action

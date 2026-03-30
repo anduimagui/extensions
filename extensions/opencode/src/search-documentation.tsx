@@ -33,10 +33,6 @@ const KNOWN_LOCALES = new Set([
   "zh-tw",
 ])
 
-type Preferences = {
-  docsLocale?: string
-}
-
 type DocItem = {
   title: string
   pathLabel: string
@@ -236,7 +232,7 @@ async function fetchDocsFromSitemap(locale: string): Promise<DocItem[]> {
 }
 
 export default function Command() {
-  const preferences = getPreferenceValues<Preferences>()
+  const preferences = getPreferenceValues<Preferences.SearchDocumentation>()
   const selectedLocale = useMemo(() => {
     const value = (preferences.docsLocale || DEFAULT_LOCALE).toLowerCase()
     return value === DEFAULT_LOCALE || KNOWN_LOCALES.has(value)

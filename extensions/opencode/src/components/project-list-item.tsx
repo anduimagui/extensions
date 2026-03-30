@@ -12,7 +12,6 @@ import {
   type SaveProjectIconHandler,
 } from "./project-list-item-actions"
 
-/* eslint-disable no-unused-vars */
 type ProjectListItemProps = {
   item: Project
   onOpenProject?: (project: Project) => Promise<void>
@@ -21,7 +20,6 @@ type ProjectListItemProps = {
   onSaveProject: SaveProjectHandler
   onSaveProjectIcon: SaveProjectIconHandler
 }
-/* eslint-enable no-unused-vars */
 
 export function ProjectListItem({
   item,

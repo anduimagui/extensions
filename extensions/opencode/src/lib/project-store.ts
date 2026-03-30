@@ -107,7 +107,6 @@ export type ProjectLists = {
   excludedItems: Project[]
 }
 
-// eslint-disable-next-line no-unused-vars
 type HydrationUpdate = (_items: Project[]) => void
 
 let iconManifestCache: Record<string, string> | undefined
@@ -427,7 +426,6 @@ function parseTsv(input: string) {
   })
 }
 
-/* eslint-disable no-unused-vars */
 async function withServer<T>(
   run: (baseUrl: string, authorization: string) => Promise<T>,
 ) {
@@ -463,8 +461,6 @@ async function withServer<T>(
     if (!child.killed) child.kill("SIGTERM")
   }
 }
-/* eslint-enable no-unused-vars */
-
 function sessionState(
   status: SessionStatus | undefined,
   permission: boolean,

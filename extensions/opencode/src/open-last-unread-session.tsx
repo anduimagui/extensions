@@ -56,7 +56,6 @@ function parseTsv(input: string) {
   })
 }
 
-/* eslint-disable no-unused-vars */
 async function withServer<T>(
   run: (baseUrl: string, authorization: string) => Promise<T>,
 ) {
@@ -92,8 +91,6 @@ async function withServer<T>(
     if (!child.killed) child.kill("SIGTERM")
   }
 }
-/* eslint-enable no-unused-vars */
-
 async function listSessions(projectIds: string[]) {
   if (!projectIds.length) return [] as SessionRow[]
 

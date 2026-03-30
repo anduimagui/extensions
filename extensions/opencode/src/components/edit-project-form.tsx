@@ -5,12 +5,10 @@ import { type Project } from "../lib/project-store"
 
 const projectColorOptions = ["pink", "teal", "orange", "purple", "blue", "lime"]
 
-/* eslint-disable no-unused-vars */
 type EditProjectFormProps = {
   item: Project
   onSave: (...args: [Project, EditProjectFormValues]) => Promise<boolean>
 }
-/* eslint-enable no-unused-vars */
 
 export type EditProjectFormValues = {
   name: string

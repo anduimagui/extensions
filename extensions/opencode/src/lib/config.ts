@@ -1,10 +1,6 @@
 import { environment, getPreferenceValues } from "@raycast/api"
 import path from "node:path"
 
-type ExtensionPreferences = {
-  cloneDirectory: string
-}
-
 function requiredPreference(value: string, label: string) {
   const trimmed = value.trim()
   if (!trimmed) {
@@ -13,8 +9,8 @@ function requiredPreference(value: string, label: string) {
   return trimmed
 }
 
-export function extensionPreferences() {
-  const preferences = getPreferenceValues<ExtensionPreferences>()
+export function cloneProjectPreferences() {
+  const preferences = getPreferenceValues<Preferences.CloneProject>()
 
   return {
     cloneDirectory: requiredPreference(

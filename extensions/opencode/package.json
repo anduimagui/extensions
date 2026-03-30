@@ -27,15 +27,6 @@
   "platforms": [
     "macOS"
   ],
-  "preferences": [
-    {
-      "name": "cloneDirectory",
-      "type": "directory",
-      "required": true,
-      "title": "Clone Directory",
-      "description": "Default folder used by the Clone Project command for new repositories."
-    }
-  ],
   "commands": [
     {
       "name": "search-projects",
@@ -52,6 +43,15 @@
       "description": "Clone a Git repository into your configured folder and open it in Opencode.",
       "icon": "icon.png",
       "mode": "no-view",
+      "preferences": [
+        {
+          "name": "cloneDirectory",
+          "type": "directory",
+          "required": true,
+          "title": "Clone Directory",
+          "description": "Default folder used by the Clone Project command for new repositories."
+        }
+      ],
       "arguments": [
         {
           "name": "repositoryUrl",
